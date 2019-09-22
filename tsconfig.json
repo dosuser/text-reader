@@ -1,0 +1,9 @@
+{
+  "files": [
+    "src/main.ts"
+  ],
+  "compilerOptions": {
+    "types" : ["node", "lodash", "express", "mozilla-readability"],
+    "target": "es5"
+  }
+}
