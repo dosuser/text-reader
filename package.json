@@ -54,6 +54,8 @@
   },
   "dependencies": {
     "gulp-typescript": "^5.0.1",
-    "pouchdb-find": "^7.1.1"
+    "pouchdb-find": "^7.1.1",
+    "readability-nodejs": "0.0.2",
+    "speak-tts": "^2.0.8"
   }
 }
