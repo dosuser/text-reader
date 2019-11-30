@@ -3,7 +3,8 @@
     "src/main.ts"
   ],
   "compilerOptions": {
-    "types" : ["node", "lodash", "express", "mozilla-readability"],
-    "target": "es5"
+    "types" : ["node", "lodash", "express"],
+    "target": "es5",
+    "noImplicitAny": false
   }
 }

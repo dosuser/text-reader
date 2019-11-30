@@ -3,8 +3,14 @@
   <head>
     <meta charset="utf-8">
     <link href="styles/popup.css" rel="stylesheet">
+    <script>
+      function checkOnload() {
+        alert('ok')
+        console.log("load popup.html")
+      }
+    </script>
   </head>
-  <body>
+  <body onload="javascript:checkOnload();">
     <div id="app" class="popup-content">
       <h1 class="app-name">Extension Boilerplate</h1>
 

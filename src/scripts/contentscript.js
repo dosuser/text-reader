@@ -1,12 +1,11 @@
 import ext from "./utils/ext";
-import Readability from 'readability';
 
 var extractTags = () => {
   var url = document.location.href;
   if(!url || !url.match(/^http/)) return;
 
   var data = {
-    title: "",
+    title: document.title,
     description: "",
     url: document.location.href
   }
@@ -23,7 +22,7 @@ var extractTags = () => {
     data.description = descriptionTag.getAttribute("content")
   }
   var documentClone = document.cloneNode(true);
-  var article = new Readability(documentClone).parse();
+  var article = documentClone;
   /*
   This article object will contain the following properties:
 
@@ -35,7 +34,9 @@ var extractTags = () => {
     dir: content direction
 
    */
-  return article;
+  //return article;
+  data.description = documentClone;
+  return data;
 }
 
 function onRequest(request, sender, sendResponse) {
