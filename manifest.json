@@ -1,8 +1,8 @@
 {
-  "name": "__MSG_appName__",
-  "version": "0.0.1",
+  "name": "TextReader",
+  "version": "0.0.2",
   "manifest_version": 2,
-  "description": "__MSG_appDescription__",
+  "description": "TextReader : Text to Speech (TTS)",
   "icons": {
     "16": "icons/icon-16.png",
     "128": "icons/icon-128.png"
@@ -21,7 +21,7 @@
 
   ],
   "options_ui": {
-    "page": "options.html"
+    "page": "about.html"
   },
   "content_scripts": [
     {

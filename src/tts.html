@@ -1,25 +1,45 @@
 <!doctype html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <link href="styles/popup.css" rel="stylesheet">
-    <!--https://stackoverflow.com/questions/37298608/content-security-policy-the-pages-settings-blocked-the-loading-of-a-resource-->
-    <!--<meta http-equiv="Content-Security-Policy" content="default-src *; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval' http://www.google.com">-->
-  </head>
-  <body>
-  <div id="app">
-  <button id="play">play</button>
-  <button id="pause">pause</button>
-  <button id="stop">stop</button>
-  <button id="pre">pre</button>
-  <button id="next">next</button>
-  <div id="support" class="popup-content">
+<head>
+  <meta charset="utf-8">
+  <link href="styles/tts.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link href="styles/aboutReader.css" ref="stylesheet">
+  <meta name="viewport" content="width=device-width; user-scalable=0">
+  <!--https://stackoverflow.com/questions/37298608/content-security-policy-the-pages-settings-blocked-the-loading-of-a-resource-->
+  <!--<meta http-equiv="Content-Security-Policy" content="default-src *; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval' http://www.google.com">-->
+</head>
+<body class="light sans-serif loaded">
+<div id="app">
+  <div id="controlBox" class="sticky menu">
+    <button id="play" class="btn btn-primary"><i class="material-icons">play_circle_filled</i>play</button>
+    <!--<button id="pause" class="btn btn-primary"><i class="material-icons">pause_circle_filled</i>pause</button>-->
+    <button id="stop" class="btn btn-primary"><i class="material-icons">stop</i>stop</button>
+    <button id="pre" class="btn btn-primary"><i class="material-icons">skip_previous</i>pre</button>
+    <button id="next" class="btn btn-primary"><i class="material-icons">skip_next</i>next</button>
+    <button id="closeWindow" class="btn btn-primary"><i class="material-icons">close</i>close</button>
+    <p>detected language <span id="docLang"></span></p>
+    <div id="support" style="display: none"></div>
+    <div id="supportedLanguages">
+    </div>
   </div>
-  <div id="supportedLanguages" class="popup-content">
+  <div class="scroll-content container content-width3" style="--font-size:20px;">
+    <div class="header reader-header reader-show-element">
+      <h1 class="reader-title" id="reader-title"></h1>
+      <div class="credits reader-credits"></div>
+      <div class="meta-data">
+        <div class="reader-estimated-time" id="reader-estimated-time"></div>
+      </div>
+    </div>
+    <hr/>
+    <div class="content">
+      <div class="moz-reader-content line-height4 reader-show-element">
+        <div id="place">
+        </div>
+      </div>
+    </div>
   </div>
-  <div id="place" class="popup-content">
-  </div>
-  <script src="scripts/tts.js"></script>
-  </div>
-  </body>
+  <!--<script src="scripts/tts.js"></script>-->
+</div>
+</body>
 </html>

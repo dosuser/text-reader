@@ -30,7 +30,7 @@ var manifest = {
   firefox: {
     "applications": {
       "gecko": {
-        "id": "my-app-id@mozilla.org"
+        "id": "TextReader@dosuser.com"
       }
     }
   }
@@ -129,10 +129,11 @@ function buildJS(target) {
   const files = [
     'background.js',
     'contentscript.js',
-    'options.js',
+    'about.js',
     'popup.js',
     'tts.js',
     'livereload.js'
+
   ]
 
   let tasks = files.map( file => {
