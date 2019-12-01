@@ -41,7 +41,7 @@
       "19": "icons/icon-19.png",
       "38": "icons/icon-38.png"
     },
-    "default_title": "Extension Boilerplate",
+    "default_title": "docu",
     "default_popup": "popup.html"
   }
 }

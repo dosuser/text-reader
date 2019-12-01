@@ -12,27 +12,28 @@ storage.get('color', function(resp) {
 var template = (data) => {
   var json = JSON.stringify(data);
   return (`
-  <input type="text" id="tmpClipboard" style="display: none"/>
+  <input type="text" id="tmpClipboard" style="display: none" />
 
   <div class="action-container">
-    <button data-bookmark='${json}' id="save-btn" class="btn btn-primary">Save</button>
+      <!--<button data-bookmark='{json}' id="save-btn" class="btn btn-primary">Save</button>-->
+    <button id="save-btn" class="btn btn-primary">Save</button>
   </div>
     <div class="action-container">
     <button id="clipboard-btn" class="btn btn-primary">copy Clipboard</button>
-        <button id="share-btn" class="btn btn-primary">copy Clipboard</button>
+    <button id="share-btn" class="btn btn-primary">share</button>
+    <button id="new-btn" class="btn btn-primary">new</button>
+    <button id="tts-btn" class="btn btn-primary">tts</button>
 
   </div>
   <div class="site-description">
     <h3 class="title">${data.title}</h3>
-    <p>${data.byline}</p>
-    <p class="description">${data.description}</p>
+    <p class="description"><pre>${data.description}</pre></p>
     <a href="${data.url}" target="_blank" class="url">${data.url}</a>
   </div>
-  <div id="content">
-    ${data.content}
-  </div>
+
   
-  <textarea>${data.content}</textarea>
+  <textarea id="content" >${data.content}</textarea>
+  <textarea id="raw" >${data.raw}</textarea>
 
   `);
 }
@@ -45,7 +46,18 @@ var renderBookmark = (data) => {
   var displayContainer = document.getElementById("display-container")
   if(data) {
     var tmpl = template(data);
-    displayContainer.innerHTML = tmpl;  
+    displayContainer.innerHTML = tmpl;
+
+    try {
+      displayContainer.innerHTML = tmpl;
+    }catch (e) {
+      console.log(e)
+      // if(e.contains('The page’s settings blocked the loading of a resource at inline')){
+      //   console.log("security violation")
+      // }
+      renderMessage(e)
+
+    }
   } else {
     renderMessage("Sorry, could not extract this page's title and URL")
   }
@@ -98,7 +110,7 @@ popup.addEventListener("click", function(e) {
       }
       navigator.share({
         title: document.title,
-        text: e.target.getAttribute("data"),
+        text: document.getElementById("content").innerText,
         url: "test",
       }); // share the URL of MDN
 
@@ -107,7 +119,51 @@ popup.addEventListener("click", function(e) {
     }
     return false
   }
+  if(e.target && e.target.matches("#new-btn")) {
+    e.preventDefault();
+    const targetBody = document.getElementById("content").innerHTML;
+    newWin(e,targetBody)
+    return false
+  }
+
+  if(e.target && e.target.matches("#tts-btn")) {
+    e.preventDefault();
+    const targetBody = document.getElementById("content").innerHTML;
+    ttsWin(e,targetBody)
+    return false
+  }
 });
+function htmlDecode(input)
+{
+  var doc = new DOMParser().parseFromString(input, "text/html");
+  return doc.documentElement.textContent;
+}
+function newWin(e, targetBody){
+  let subWindow = window.open("empty.html", "_new");
+  if(subWindow == null){
+    return;
+  }
+  subWindow.addEventListener('load', function () {
+    // alert(targetBody)
+    const place = subWindow.document.getElementById("place");
+    place.innerHTML = htmlDecode(targetBody);
+
+  }, true);
+}
+
+
+function ttsWin(e, targetBody){
+  let subWindow = window.open("tts.html", "_new");
+  if(subWindow == null){
+    return;
+  }
+  subWindow.addEventListener('load', function () {
+    // alert(targetBody)
+    const place = subWindow.document.getElementById("place");
+    place.innerHTML += htmlDecode(targetBody);
+
+  }, true);
+}
 
 
 var optionsLink = document.querySelector(".js-options");

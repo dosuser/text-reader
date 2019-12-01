@@ -1,14 +1,16 @@
 import ext from "./utils/ext";
-import Readability from 'readability';
+const readability = require('readability-nodejs')
 
 var extractTags = () => {
   var url = document.location.href;
   if(!url || !url.match(/^http/)) return;
 
   var data = {
-    title: "",
+    title: document.title,
     description: "",
-    url: document.location.href
+    content:"",
+    url: document.location.href,
+    raw:""
   }
 
   var ogTitle = document.querySelector("meta[property='og:title']");
@@ -22,8 +24,26 @@ var extractTags = () => {
   if(descriptionTag) {
     data.description = descriptionTag.getAttribute("content")
   }
-  var documentClone = document.cloneNode(true);
-  var article = new Readability(documentClone).parse();
+    try {
+      var documentClone = document.cloneNode(true);
+      var documentRaw = document.cloneNode(true);
+      let reader = new readability.Readability(documentClone);
+      var article = reader.parse(documentClone);
+      if(article != null) {
+        data.content = article.content;
+        data.content = article.content;
+        if(documentRaw.documentElement.outerHTML != undefined || documentRaw.documentElement != null){
+          data.raw = documentRaw.documentElement.outerHTML
+        }else {
+          //
+          data.raw = documentRaw.innerHTML;
+        }
+      }
+
+    } catch (e) {
+      data.description = JSON.stringify(e)
+    }
+
   /*
   This article object will contain the following properties:
 
@@ -35,7 +55,8 @@ var extractTags = () => {
     dir: content direction
 
    */
-  return article;
+  //return article;
+  return data;
 }
 
 function onRequest(request, sender, sendResponse) {

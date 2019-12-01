@@ -7,20 +7,19 @@
     <!--<meta http-equiv="Content-Security-Policy" content="default-src *; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval' http://www.google.com">-->
   </head>
   <body>
-    <div id="app" class="popup-content">
-      <h1 class="app-name">Extension Boilerplate</h1>
-
-      <div id="display-container"></div>
-
-      <footer>
-        <p>
-          <small>
-            <a href="#" class="js-options">Options</a>
-          </small>
-        </p>
-      </footer>
-    </div>
-    
-    <script src="scripts/popup.js"></script>
+  <div id="app">
+  <button id="play">play</button>
+  <button id="pause">pause</button>
+  <button id="stop">stop</button>
+  <button id="pre">pre</button>
+  <button id="next">next</button>
+  <div id="support" class="popup-content">
+  </div>
+  <div id="supportedLanguages" class="popup-content">
+  </div>
+  <div id="place" class="popup-content">
+  </div>
+  <script src="scripts/tts.js"></script>
+  </div>
   </body>
 </html>
