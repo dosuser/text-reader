@@ -10,7 +10,9 @@ var extractTags = () => {
     description: "",
     content:"",
     url: document.location.href,
-    raw:""
+    raw:"",
+    docLang: '',
+    docLength:'',
   }
 
   var ogTitle = document.querySelector("meta[property='og:title']");
@@ -26,14 +28,25 @@ var extractTags = () => {
   }
     try {
       var documentClone = document.cloneNode(true);
+
+
       var documentRaw = document.cloneNode(true);
       let reader = new readability.Readability(documentClone);
       var article = reader.parse(documentClone);
       if(article != null) {
         data.content = article.content;
         data.content = article.content;
+        if(article.title){
+          data.title = article.title;
+        }
+        if(article.length){
+          data.docLength = article.length;
+        }
         if(documentRaw.documentElement.outerHTML != undefined || documentRaw.documentElement != null){
           data.raw = documentRaw.documentElement.outerHTML
+          data.docLang = document.getElementsByTagName("html")[0].getAttribute("lang");
+
+          //
         }else {
           //
           data.raw = documentRaw.innerHTML;
@@ -44,18 +57,6 @@ var extractTags = () => {
       data.description = JSON.stringify(e)
     }
 
-  /*
-  This article object will contain the following properties:
-
-    title: article title
-    content: HTML string of processed article content
-    length: length of an article, in characters
-    excerpt: article description, or short excerpt from the content
-    byline: author metadata
-    dir: content direction
-
-   */
-  //return article;
   return data;
 }
 
@@ -66,3 +67,18 @@ function onRequest(request, sender, sendResponse) {
 }
 
 ext.runtime.onMessage.addListener(onRequest);
+/*
+readability parse object
+    return {
+      title: this._articleTitle,
+      byline: metadata.byline || this._articleByline,
+      dir: this._articleDir,
+      content: articleContent.innerHTML,
+      textContent: textContent,
+      length: textContent.length,
+      excerpt: metadata.excerpt,
+      siteName: metadata.siteName || this._articleSiteName,
+      image: _image,
+      images: _images
+    };
+ */

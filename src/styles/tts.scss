@@ -1,0 +1,41 @@
+//@import "modules/reset";
+//@import "modules/variables";
+//@import "modules/layout";
+//@import "../../node_modules/bootstrap/scss/bootstrap";
+body, html {
+  padding: 0;
+  margin: 0;
+}
+
+.popup-content {
+  min-width: 220px;
+  min-height: 100px;
+  //max-width: 350px;
+}
+
+.tts-focus{
+  border: #2e7fde wave;
+  background-color: coral;
+  color: #2e7fde;
+  display: block;
+}
+
+
+.scroll-content {
+  padding-top: 200px;
+  padding: 16px;
+}
+
+.sticky {
+  position: fixed;
+  top: 0;
+  width: 100%;
+}
+
+.sticky + .scroll-content {
+  padding-top: 200px;
+}
+
+.menu {
+  background: whitesmoke;
+}

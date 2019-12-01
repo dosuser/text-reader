@@ -24,11 +24,28 @@ place.addEventListener("click", function(e) {
   if(e.target && e.target.matches("#next")) {
     next(e);
   }
-
+  if(e.target && e.target.matches("#prev")) {
+    prev(e);
+  }
+  if(e.target && e.target.matches("#stop")) {
+    stopTTS(e);
+  }
+  if(e.target && e.target.matches("#closeWindow")) {
+    window.close();
+  }
 });
 
+var dumSplittdMode = false;
+var stop = false;
+
+
 function play(e) {
-  alert("play")
+  stop = false;
+  if(ttsPosition>0){
+    ttsPosition--;
+  }
+  next(e);
+
 
 }
 var nodes;
@@ -38,20 +55,51 @@ function initRange() {
 function next(e) {
   ttsPosition++;
   var phase = coloringCurrentNode(nodes[ttsPosition], nodes[ttsPosition-1]);
+  while(checkSkip(phase)){
+    phase = coloringCurrentNode(nodes[ttsPosition], nodes[ttsPosition-1]);
+  }
   _prepareSpeakButton(speech, phase, next)
 }
+
+function checkSkip(targetText) {
+  if(targetText.indexOf("src") >= 0){
+    return true;
+  }
+
+  return false;
+
+}
+
 function prev(e) {
-  focusPrev(ttsPosition,--ttsPosition)
+  ttsPosition--;
+  var phase = coloringCurrentNode(nodes[ttsPosition], nodes[ttsPosition-1]);
+  _prepareSpeakButton(speech, phase, next)
+}
+function stopTTS(e) {
+  console.log("stopTTS")
+  stop = true;
+  speech.pause();
+  speech.cancel();
 }
 
 const speech = new Speech();
 
-function _init() {
+function init() {
+  var language = window.navigator.language || window.navigator.userLanguage; //for IE
+  const docLang = document.getElementById("docLang").innerHTML;
+  var targetLang;
+  if(docLang != undefined && docLang != 'undefined' && docLang != ''){
+    targetLang = docLang
+  }else{
+    targetLang = language;
+  }
+
+  console.log("init language set", targetLang)
   speech
     .init({
       volume: 0.5,
-      lang: "ko-KR",
-      rate: 1,
+      lang: language,
+      rate: 1.2,
       pitch: 1,
       //'voice':'Google UK English Male',
       //'splitSentences': false,
@@ -63,7 +111,7 @@ function _init() {
     })
     .then(data => {
       console.log("Speech is ready", data);
-      _addVoicesList(data.voices);
+      _addVoicesList(data.voices,targetLang);
       // makeup("readability-page-1")
       // _prepareSpeakButton(speech);
       initRange();
@@ -77,12 +125,22 @@ function _init() {
   document.getElementById("support").innerHTML = text;
 }
 
-const _addVoicesList = voices => {
+const _addVoicesList = (voices, preferLanguage) => {
   const list = window.document.createElement("div");
+
+
   let html =
-    '<h2>Available Voices</h2><select id="languages"><option value="">autodetect language</option>';
+    '<b>Available Voices</b> <select id="languages"><option value="">autodetect language</option>';
   voices.forEach(voice => {
-    html += `<option value="${voice.lang}" data-name="${voice.name}">${
+
+    var selected = '';
+    console.log(voice.lang, preferLanguage)
+
+    if(voice.lang.indexOf(preferLanguage)>= 0){
+      console.log(voice.lang ,'selected')
+      selected = "SELECTED"
+    }
+    html += `<option value="${voice.lang}" data-name="${voice.name}" ${selected}>${
       voice.name
       } (${voice.lang})</option>`;
   });
@@ -105,20 +163,11 @@ function makeup(id) {
 }
 
 var ttsPosition = 0;
-function focusNext(i) {
-  console.log("focus ", i);
 
-  var node = document.getElementById("main").childNodes[i];
-  if (
-    node.previousSibling != undefined &&
-    node.previousSibling.classList != undefined
-  ) {
-    node.previousSibling.classList.remove("tts-focus");
-  }
-  if (node.classList != undefined) {
-    node.classList.add("tts-focus");
-  }
+function suspend(speech){
+
 }
+
 function coloringCurrentNode(currentNode,prevNode) {
   if (prevNode != undefined && prevNode.classList != undefined) {
     prevNode.classList.remove("tts-focus");
@@ -127,10 +176,16 @@ function coloringCurrentNode(currentNode,prevNode) {
     currentNode.classList.add("tts-focus");
   }
   console.log("node", currentNode, currentNode.textContent)
+  currentNode.scrollIntoView()
+  window.scrollBy(0, -200); // Adjust scrolling with a negative value here
   return currentNode.textContent;
 }
 
 function _prepareSpeakButton(speech, phase, onNext) {
+  if(stop){
+    console.info("check, is stoped", stop)
+    return
+  }
   const languages = document.getElementById("languages");
     const language = languages.value;
     const voice = languages.options[languages.selectedIndex].dataset.name;
@@ -171,4 +226,4 @@ function _prepareSpeakButton(speech, phase, onNext) {
       });
 
 }
-_init()
+init()

@@ -1,14 +1,14 @@
 {
   "appName": {
-    "message": "Ext Starter",
-    "description": "The name of the extension."
+    "message": "TextReader",
+    "description": "TextReader : Text to Speech (TTS)"
   },
   "appDescription": {
-    "message": "Boilerplate for building cross browser extensions",
-    "description": "The description of the extension."
+    "message": "simple TTS extension",
+    "description": ""
   },
   "btnTooltip": {
-    "message": "Ext Starter",
+    "message": "",
     "description": "Tooltip for the button."
   }
 }
