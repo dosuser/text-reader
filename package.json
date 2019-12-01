@@ -17,13 +17,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/EmailThis/extension-boilerplate"
+    "url": "https://github.com/dosuser/text-reader"
   },
-  "author": "Bharani <bharani91@gmail.com> (https://github.com/bharani91)",
+  "author": "dosuser <dosuser00@gmail.com>",
   "bugs": {
-    "url": "https://github.com/EmailThis/extension-boilerplate/issues"
+    "url": "https://github.com/dosuser/text-reader/issues"
   },
-  "homepage": "https://www.emailthis.me/extension-boilerplate",
+  "homepage": "https://github.com/dosuser/text-reader",
   "devDependencies": {
     "@types/node": "^12.7.5",
     "babel-core": "^6.1.2",
