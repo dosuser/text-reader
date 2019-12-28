@@ -132,7 +132,8 @@ function buildJS(target) {
     'about.js',
     'popup.js',
     'tts.js',
-    'livereload.js'
+    'livereload.js',
+    'tts_prev.js',
 
   ]
 
@@ -151,12 +152,12 @@ function buildJS(target) {
     .pipe(buffer())
     .pipe(gulpif(!production, $.sourcemaps.init({ loadMaps: true }) ))
     .pipe(gulpif(!production, $.sourcemaps.write('./') ))
-    .pipe(gulpif(production, $.uglify({ 
-      "mangle": false,
-      "output": {
-        "ascii_only": true
-      } 
-    })))
+    // .pipe(gulpif(production, $.uglify({
+    //   "mangle": false,
+    //   "output": {
+    //     "ascii_only": true
+    //   }
+    // })))
     .pipe(gulp.dest(`build/${target}/scripts`));
   });
 

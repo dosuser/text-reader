@@ -5,18 +5,21 @@
   <link href="styles/tts.css" rel="stylesheet">
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   <link href="styles/aboutReader.css" ref="stylesheet">
-  <meta name="viewport" content="width=device-width; user-scalable=0">
+  <meta name="viewport" content="width=device-width, user-scalable=0">
   <!--https://stackoverflow.com/questions/37298608/content-security-policy-the-pages-settings-blocked-the-loading-of-a-resource-->
   <!--<meta http-equiv="Content-Security-Policy" content="default-src *; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval' http://www.google.com">-->
 </head>
 <body class="light sans-serif loaded">
+<script src="scripts/tts_prev.js"></script>
 <div id="app">
   <div id="controlBox" class="sticky menu">
     <button id="play" class="btn btn-primary"><i class="material-icons">play_circle_filled</i>play</button>
     <!--<button id="pause" class="btn btn-primary"><i class="material-icons">pause_circle_filled</i>pause</button>-->
     <button id="stop" class="btn btn-primary"><i class="material-icons">stop</i>stop</button>
-    <button id="pre" class="btn btn-primary"><i class="material-icons">skip_previous</i>pre</button>
+    <button id="prev" class="btn btn-primary"><i class="material-icons">skip_previous</i>pre</button>
     <button id="next" class="btn btn-primary"><i class="material-icons">skip_next</i>next</button>
+    <!--<button id="slow" class="btn btn-primary"><i class="material-icons">fast_rewind</i>slow</button>-->
+    <!--<button id="fast" class="btn btn-primary"><i class="material-icons">fast_forward</i>fast</button>-->
     <button id="closeWindow" class="btn btn-primary"><i class="material-icons">close</i>close</button>
     <p>detected language <span id="docLang"></span></p>
     <div id="support" style="display: none"></div>

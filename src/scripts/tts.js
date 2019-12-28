@@ -33,11 +33,17 @@ place.addEventListener("click", function(e) {
   if(e.target && e.target.matches("#closeWindow")) {
     window.close();
   }
+  if(e.target && e.target.matches("#fast")) {
+    fast();
+  }
+  if(e.target && e.target.matches("#slow")) {
+    slow();
+  }
 });
 
 var dumSplittdMode = false;
 var stop = false;
-
+var speechRate = 1.2
 
 function play(e) {
   stop = false;
@@ -48,6 +54,7 @@ function play(e) {
 
 
 }
+
 var nodes;
 function initRange() {
   nodes = document.getElementsByTagName("p");
@@ -68,6 +75,52 @@ function checkSkip(targetText) {
 
   return false;
 
+}
+var language = window.navigator.language || window.navigator.userLanguage; //for IE
+
+function slow() {
+  stopTTS()
+  speechRate = speechRate - 0.2
+
+  speech
+    .init({
+      volume: 0.5,
+      lang: language,
+      rate: speechRate,
+      pitch: 1,
+      //'voice':'Google UK English Male',
+      //'splitSentences': false,
+      listeners: {
+        onvoiceschanged: voices => {
+          console.log("Voices changed", voices);
+        }
+      }
+    }).then(function(){
+
+  })
+  play()
+}
+function fast() {
+  stopTTS()
+  speechRate = speechRate + 0.2
+
+  speech
+    .init({
+      volume: 0.5,
+      lang: language,
+      rate: speechRate,
+      pitch: 1,
+      //'voice':'Google UK English Male',
+      //'splitSentences': false,
+      listeners: {
+        onvoiceschanged: voices => {
+          console.log("Voices changed", voices);
+        }
+      }
+    }).then(function(){
+
+  })
+  play()
 }
 
 function prev(e) {
@@ -99,7 +152,7 @@ function init() {
     .init({
       volume: 0.5,
       lang: language,
-      rate: 1.2,
+      rate: speechRate,
       pitch: 1,
       //'voice':'Google UK English Male',
       //'splitSentences': false,
@@ -119,10 +172,10 @@ function init() {
     .catch(e => {
       console.error("An error occured while initializing : ", e);
     });
-  const text = speech.hasBrowserSupport()
-    ? "TTS ok"
-    : "TTS not supported";
-  document.getElementById("support").innerHTML = text;
+  // const text = speech.hasBrowserSupport()
+  //   ? "TTS ok"
+  //   : "TTS not supported";
+  // document.getElementById("support").innerHTML = text;
 }
 
 const _addVoicesList = (voices, preferLanguage) => {
@@ -146,7 +199,7 @@ const _addVoicesList = (voices, preferLanguage) => {
   });
   list.innerHTML = html;
   document.getElementById("supportedLanguages").appendChild(list);
-  // window.document.body.appendChild(list);
+  // window.document.body.appendChild(list);browser_specific_settings
 };
 function makeup(id) {
   document
@@ -191,8 +244,10 @@ function _prepareSpeakButton(speech, phase, onNext) {
     const voice = languages.options[languages.selectedIndex].dataset.name;
     if (language) speech.setLanguage(languages.value);
     if (voice) speech.setVoice(voice);
+  console.log(speechRate);
     speech
       .speak({
+        rate: speechRate,
         text: phase,
         queue: false,
         listeners: {

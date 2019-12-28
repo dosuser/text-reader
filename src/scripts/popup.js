@@ -57,11 +57,15 @@ ext.tabs.query({active: true, currentWindow: true}, function (tabs) {
   });
 });
 
+
+function dump(data){
+  console.log(data)
+}
 popup.addEventListener("click", function (e) {
    if (e.target && e.target.matches("#tts-btn")) {
     ext.tabs.query({active: true, currentWindow: true}, function (tabs) {
       var activeTab = tabs[0];
-      chrome.tabs.sendMessage(activeTab.id, {action: 'process-page'}, function (data) {
+      ext.tabs.sendMessage(activeTab.id, {action: 'process-page'}, function (data) {
         ttsWin(e, data)
 
       });
@@ -77,32 +81,68 @@ function htmlDecode(input) {
 
 
 function ttsWin(e, data) {
-  let subWindow = window.open("tts.html", "_new");
-  if (subWindow == null) {
-    return;
-  }
-  subWindow.addEventListener('load', function () {
-    // alert(targetBody)
+  //
+  // let subWindow = window.open("tts.html#"+data.content);
+  // if (subWindow == null) {
+  //   alert("browser not supported")
+  //   return;
+  // }
+  var tabPromise = browser.tabs.create({url:"tts.html"})
+
+  tabPromise.then(function(openedTab){
+
+    // alert("tab created" +JSON.stringify( openedTab));
+    try {
+      // alert(openedTab.id)
+      // browser.tabs.executeScript(openedTab.id, {
+      //   code: `console.log('location:', window.location.href);`
+      // });
+      var init = false;
+      ext.tabs.onUpdated.addListener(function (tabId,changeInfo,eTab) {
+        if(tabId == openedTab.id && init == false){
+          var res = ext.tabs.sendMessage(openedTab.id, {action: 'hello', data: data});
+          res.then(function (x) {
+            console.log(x)
+            init = true;
+          })
+        }
+      })
+      // chrome.tabs.sendMessage(openedTab.id, {action: 'hello', data: data});
 
 
-    const docLang = subWindow.document.getElementById("docLang");
-    docLang.innerHTML = data.docLang;
+    }catch (e) {
+      alert(e)
+      alert("er1" + JSON.stringify(e));
+    }
 
-    const place = subWindow.document.getElementById("place");
-    place.innerHTML += data.content;
-    const docTitle = subWindow.document.getElementById("reader-title");
-    docTitle.innerHTML = data.title;
-    const docLength = subWindow.document.getElementById("reader-estimated-time");
-    // docLength.innerHTML = data.docLength;
-    var runScript = subWindow.document.createElement("script");
+  }, function (errorEvent) {
+    alert("error "+JSON.stringify( errorEvent));
 
-    runScript.src = "scripts/tts.js";
-    place.appendChild(runScript);
-
-
-    window.close()
-
-  }, true);
+  })
+  //
+  // console.log("run",data)
+  // subWindow.addEventListener('load', function () {
+  //   // alert(targetBody)
+  //
+  //   console.log("run2", data)
+  //   const docLang = subWindow.document.getElementById("docLang");
+  //   docLang.innerHTML = data.docLang;
+  //
+  //   const place = subWindow.document.getElementById("place");
+  //   place.innerHTML += data.content;
+  //   const docTitle = subWindow.document.getElementById("reader-title");
+  //   docTitle.innerHTML = data.title;
+  //   const docLength = subWindow.document.getElementById("reader-estimated-time");
+  //   // docLength.innerHTML = data.docLength;
+  //   var runScript = subWindow.document.createElement("script");
+  //
+  //   runScript.src = "scripts/tts.js";
+  //   place.appendChild(runScript);
+  //
+  //
+  //   window.close()
+  //
+  // }, true);
 
 }
 
